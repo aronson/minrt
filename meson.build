@@ -21,17 +21,24 @@ sources_rs = [
   'src/rust/start.c',
 ]
 
-sources = [
+sources_rom = [
   'src/gba/header.S',
   'src/gba/rt0.s',
+]
+
+sources_mb = [
+  'src/gba/header.S',
+  'src/gba/crt0_agbpack.S',
 ]
 
 lang = get_option('target_language')
 
 if lang == 'c'
-  sources += sources_c
+  sources_rom += sources_c
+  sources_mb += sources_c
 elif lang == 'rust'
-  sources += sources_rs
+  sources_rom += sources_rs
+  sources_mb += sources_rs
 endif
 
 lib = meson.current_source_dir() / 'lib'
@@ -47,13 +54,13 @@ libdata = [
 
 minrt = static_library(
   'minrt_rom',
-  sources,
+  sources_rom,
   c_args: ['-UMULTIBOOT'],
   link_depends: libdata)
 
 minrt_mb = static_library(
   'minrt_mb',
-  sources,
+  sources_mb,
   c_args: ['-DMULTIBOOT'],
   link_depends: libdata)
 
@@ -63,7 +70,7 @@ minrt_dep = declare_dependency(
 
 minrt_mb_dep = declare_dependency(
   link_with: minrt_mb,
-  link_args: link_args + ['-Tmultiboot.mem', '-Tgba.x'])
+  link_args: link_args + ['-Tmultiboot.mem', '-Telf.x'])
 
 meson.override_dependency('minrt', minrt_dep)
 meson.override_dependency('minrt-multiboot', minrt_mb_dep)
