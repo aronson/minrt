@@ -26,6 +26,8 @@
 .syntax         unified
 .cpu            arm7tdmi
 
+    .global _start_rom
+_start_rom:
     .global _start
 _start:
     @ IRQs off

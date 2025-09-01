@@ -70,7 +70,7 @@ minrt_dep = declare_dependency(
 
 minrt_mb_dep = declare_dependency(
   link_with: minrt_mb,
-  link_args: link_args + ['-Tmultiboot.mem', '-Telf.x'])
+  link_args: link_args + ['-Tmultiboot.mem', '-Telf.x', '-Tld_size_symbols.ld'])
 
 meson.override_dependency('minrt', minrt_dep)
 meson.override_dependency('minrt-multiboot', minrt_mb_dep)
